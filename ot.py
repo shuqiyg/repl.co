@@ -1,13 +1,18 @@
 def main():
     stale = "I love you ok"
     print("OT!")
+    stale1 = "hello world"
+    stale1 = stale1.replace(stale1[3:8], '')
+    print(stale1)
     stale = stale[:0] + "weird insertion" + stale[0:]
     print(stale)
     valid = isValid(
         'Repl.it uses operational transformations to keep everyone in a multiplayer repl in sync.',
-        'Repl.it uses operational transformations.',
-        [{"op": "skip", "count": 40}, {"op": "delete", "count": 47}]
+        'We use operational transformations to keep everyone in a multiplayer repl in sync.',
+        [{"op": "delete", "count": 7}, {"op": "insert", "chars": "We"}, {"op": "skip", "count": 4}, {"op": "delete", "count": 1}]
     )
+    print(len('Repl.it uses operational transformations to keep everyone in a multiplayer repl in sync.'))
+    print(len('Repl.it uses operational transformations.'))
     print(valid)
 # def test():
 #     return "sf"+"fsdf"
@@ -39,11 +44,12 @@ def isValid(stale, latest, otjson):
             if(ot['op'] == 'insert'):
                 # insert(stale, operations["chars"])
                 stale = stale[:cursor] + ot['chars'] + stale[cursor:]
+                cursor += len(ot['chars'])
             elif(ot['op']== 'delete'):
                 # delete(stale, pos, operations["count"])
                 if(len(stale) - cursor < ot['count']):
                     return False
-                stale = stale.replace(stale[cursor:ot['count']], '')
+                stale = stale.replace(stale[cursor:cursor + ot['count']], '')
             else:
                 # skip(pos, operations["count"])
                 if cursor + ot['count'] > len(stale):
